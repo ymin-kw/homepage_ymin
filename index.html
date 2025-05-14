@@ -4,57 +4,97 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Youngho Min</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    header, nav, section {
+      margin-bottom: 30px;
+    }
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #0366d6;
+    }
+    #chat-container {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    #userInput {
+      width: 80%;
+      padding: 8px;
+    }
+    button {
+      padding: 8px 10px;
+      margin-left: 5px;
+    }
+    #responseArea {
+      margin-top: 15px;
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 <body>
 
 <header>
-  <h1 class="title">Youngho Min</h1>
+  <h1>Youngho Min</h1>
   <p>Assistant Professor, Kwangwoon University</p>
 </header>
 
 <nav>
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="research.html">Research</a>
-  <a href="teaching.html">Teaching</a>
-  <a href="presentations.html">Presentations</a>
-  <a href="contact.html">Contact</a>
+  <a href="#">Home</a>
+  <a href="#">About</a>
+  <a href="#">Research</a>
+  <a href="#">Teaching</a>
+  <a href="#">Presentations</a>
+  <a href="#">Contact</a>
 </nav>
 
 <section>
   <h2>Welcome</h2>
-  <p>This is the personal homepage of Dr. Youngho Min. Please use the navigation above to learn more.</p>
-
-  <!-- ✅ 챗봇 UI 추가 -->
-  <div id="chat-container" style="border:1px solid #ccc; padding:10px; width:100%; max-width:500px; margin-top:20px;">
-    <h3>Ask AI about this website</h3>
-    <input id="userInput" type="text" placeholder="예: 이 사이트는 어떤 내용을 담고 있나요?" style="width:80%;">
-    <button onclick="sendToGemini()">보내기</button>
-    <div id="responseArea" style="margin-top:10px; white-space:pre-wrap;"></div>
-  </div>
+  <p>This is the personal homepage of Dr. Youngho Min. You can ask the AI assistant about this site below.</p>
 </section>
 
-<!-- ✅ 챗봇 동작 스크립트 -->
+<section id="chat-container">
+  <h3>Ask AI about this website</h3>
+  <input id="userInput" type="text" placeholder="예: 이 홈페이지는 어떤 내용을 담고 있나요?" />
+  <button onclick="sendToGemini()">보내기</button>
+  <div id="responseArea">여기에 AI의 답변이 나타납니다.</div>
+</section>
+
 <script>
   async function sendToGemini() {
     const question = document.getElementById('userInput').value;
     const responseArea = document.getElementById('responseArea');
     responseArea.innerText = '생각 중...';
 
-    const res = await fetch("https://script.google.com/macros/s/AKfycbwX2jPq5Bvz-nvC3Wclj5Y3VT7VI7FWAXhbniI31qQtSomsrfkMqyrnfx-2mP_mfHrtdA/exec", {
-      method: "POST",
-      body: JSON.stringify({ message: question }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwX2jPq5Bvz-nvC3Wclj5Y3VT7VI7FWAXhbniI31qQtSomsrfkMqyrnfx-2mP_mfHrtdA/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: question })
+      });
 
-    const data = await res.json();
-    responseArea.innerText = data.reply || '응답에 실패했습니다.';
+      if (!response.ok) {
+        throw new Error(`서버 응답 오류: ${response.status}`);
+      }
+
+      const data = await response.json();
+      responseArea.innerText = data.reply || "AI 응답이 비어 있어요.";
+    } catch (error) {
+      responseArea.innerText = "⚠ 오류 발생: " + error.message;
+    }
   }
 </script>
 
-<script src="script.js"></script>
 </body>
 </html>
