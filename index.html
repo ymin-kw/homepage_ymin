@@ -66,7 +66,7 @@
     responseArea.innerText = "생각 중...";
 
     try {
-      const res = await fetch("/exec", {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwX2jPq5Bvz-nvC3Wclj5Y3VT7VI7FWAXhbniI31qQtSomsrfkMqyrnfx-2mP_mfHrtdA/exec", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
