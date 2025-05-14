@@ -22,11 +22,38 @@
   <a href="contact.html">Contact</a>
 </nav>
 
-
 <section>
   <h2>Welcome</h2>
   <p>This is the personal homepage of Dr. Youngho Min. Please use the navigation above to learn more.</p>
+
+  <!-- ✅ 챗봇 UI 추가 -->
+  <div id="chat-container" style="border:1px solid #ccc; padding:10px; width:100%; max-width:500px; margin-top:20px;">
+    <h3>Ask AI about this website</h3>
+    <input id="userInput" type="text" placeholder="예: 이 사이트는 어떤 내용을 담고 있나요?" style="width:80%;">
+    <button onclick="sendToGemini()">보내기</button>
+    <div id="responseArea" style="margin-top:10px; white-space:pre-wrap;"></div>
+  </div>
 </section>
+
+<!-- ✅ 챗봇 동작 스크립트 -->
+<script>
+  async function sendToGemini() {
+    const question = document.getElementById('userInput').value;
+    const responseArea = document.getElementById('responseArea');
+    responseArea.innerText = '생각 중...';
+
+    const res = await fetch("https://script.google.com/macros/s/AKfycbwX2jPq5Bvz-nvC3Wclj5Y3VT7VI7FWAXhbniI31qQtSomsrfkMqyrnfx-2mP_mfHrtdA/exec", {
+      method: "POST",
+      body: JSON.stringify({ message: question }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    const data = await res.json();
+    responseArea.innerText = data.reply || '응답에 실패했습니다.';
+  }
+</script>
 
 <script src="script.js"></script>
 </body>
