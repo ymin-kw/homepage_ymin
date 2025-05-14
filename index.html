@@ -5,30 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Youngho Min</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    #chat-container {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-top: 30px;
-      border-radius: 6px;
-      max-width: 600px;
-    }
-    #userInput {
-      width: 75%;
-      padding: 8px;
-    }
-    #chat-button {
-      padding: 8px 12px;
-      margin-left: 5px;
-    }
-    #responseArea {
-      margin-top: 15px;
-      background-color: #f9f9f9;
-      padding: 10px;
-      white-space: pre-wrap;
-      border-radius: 5px;
-    }
-  </style>
 </head>
 <body>
 
@@ -50,39 +26,10 @@
   <h2>Welcome</h2>
   <p>This is the personal homepage of Dr. Youngho Min. Please use the navigation above to learn more.</p>
 
-  <!-- ✅ 챗봇 UI 추가 -->
-  <div id="chat-container">
-    <h3>Ask AI about this website</h3>
-    <input id="userInput" type="text" placeholder="예: 이 홈페이지는 어떤 내용을 담고 있나요?" />
-    <button id="chat-button" onclick="sendToGemini()">보내기</button>
-    <div id="responseArea">AI 응답이 여기에 표시됩니다.</div>
-  </div>
+  <!-- 챗봇 페이지를 iframe으로 추가 -->
+  <h3>Ask AI about this website</h3>
+  <iframe src="https://script.google.com/macros/s/AKfycbwX2jPq5Bvz-nvC3Wclj5Y3VT7VI7FWAXhbniI31qQtSomsrfkMqyrnfx-2mP_mfHrtdA/exec" width="100%" height="500px" frameborder="0"></iframe>
 </section>
-
-<script>
-  async function sendToGemini() {
-    const question = document.getElementById("userInput").value;
-    const responseArea = document.getElementById("responseArea");
-    responseArea.innerText = "생각 중...";
-
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbwX2jPq5Bvz-nvC3Wclj5Y3VT7VI7FWAXhbniI31qQtSomsrfkMqyrnfx-2mP_mfHrtdA/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: question })
-      });
-
-      if (!res.ok) throw new Error("서버 응답 오류: " + res.status);
-
-      const data = await res.json();
-      responseArea.innerText = data.reply || "AI 응답이 비어 있습니다.";
-    } catch (err) {
-      responseArea.innerText = "⚠ 오류 발생: " + err.message;
-    }
-  }
-</script>
 
 <script src="script.js"></script>
 </body>
